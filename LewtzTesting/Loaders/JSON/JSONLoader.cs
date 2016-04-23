@@ -39,11 +39,6 @@ namespace LewtzTesting.Loaders.JSON
                     tableToAddTo.Add(item.ToObject<Item>());
                 }
 
-                foreach (var item in tableToAddTo.GetChildren())
-                {
-                   //Console.WriteLine(item);
-                }
-
                 var tablesToLoad =
                         from table in token.Children<JObject>()
                         where table.Value<string>("type") == "table"
@@ -52,10 +47,8 @@ namespace LewtzTesting.Loaders.JSON
                 foreach (var table in tablesToLoad)
                 {
                     var newTable = table.ToObject<Table>(); //includes base case "probability"
-                    //Console.WriteLine(newTable);
 
                     string newFilename = filename.Replace(currentTableName, newTable.Name);
-                    //Console.WriteLine(newFilename);
 
                     var probabilityList = getProbabilityListFromNode(table);
 
@@ -63,20 +56,22 @@ namespace LewtzTesting.Loaders.JSON
                     for(int i = 0; i < probabilityList.Count; ++i)
                     {
                         var p = probabilityList[i];
-                        var diffProbability = (int)p;
+                        
 
                         var diffName = newTable.Name + p.Name.Replace("probability","");
-                        
-                        //Console.WriteLine("diff" + diffName);
-                        
+
+                        var diffProbability = (int)p;
                         if (diffProbability > 0)
                         {
                             var testPrint = new Visitors.PrintEntireTreeVisitor();
                             var diffProbTable = new Table(diffName, diffProbability, newTable.Book);
                             LoadTableFromFile(newFilename, diffProbTable);
                             tableToAddTo.Add(diffProbTable);
+                            diffProbTable.Sort();
                         }
+                        newTable.Sort();
                     }
+                    tableToAddTo.Sort();
                 }
             }
         }
@@ -89,7 +84,7 @@ namespace LewtzTesting.Loaders.JSON
             var name = filename.Substring(indexOfLastSlash + 1, length);
 
             return name;
-        }
+        } 
 
         private List<JProperty> getProbabilityListFromNode(JToken node)
         {

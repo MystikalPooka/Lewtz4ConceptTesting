@@ -8,7 +8,7 @@
 	{
 	  "name":"uncommon",
 	  "book":"DMG222",
-	  "probability":70,
+	  "probability":75,
 	  "probability_minor":80,
 	  "type":"table"
 	},
@@ -18,13 +18,5 @@
 	  "probability":100,
 	  "probability_minor":100,
 	  "type":"table"
-	},
-	{
-	  "name":"Fuckstick",
-	  "book":"DMG223",
-	  "cost":10000,
-	  "probability":56,
-	  "probability_minor":100,
-	  "type":"item"
 	}
 ]

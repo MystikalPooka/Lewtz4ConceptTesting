@@ -1,10 +1,6 @@
-﻿using LewtzTesting.Loaders;
-using LewtzTesting.Visitors;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using LewtzTesting.Visitors;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace LewtzTesting.Data_Structure
 {
@@ -42,6 +38,53 @@ namespace LewtzTesting.Data_Structure
         public IList<Component> GetChildren()
         {
             return _children.AsReadOnly();
+        }
+
+        public void Sort()
+        {
+            _children.Sort((x, y) => x.Probability.CompareTo(y.Probability));
+        }
+
+        private System.Random rand = new System.Random();
+        public List<Item> RollLoot()
+        {
+            List<Item> rolledLootList = new List<Item>();
+
+            
+            int maxProb = _children.Max(x => x.Probability);
+
+            int roll = rand.Next(0, maxProb);
+            foreach (Component comp in _children)
+            {
+                if (comp.Probability > roll)
+                {
+                    if(comp is Table)
+                    {
+                        rolledLootList.AddRange(((Table)comp).RollLoot());
+                    }
+                    if(comp is Item)
+                    {
+                        rolledLootList.Add((Item)comp);
+                        
+                    }
+                    if(comp is MagicItem)
+                    {
+                        //build magic item here and shiz
+                    }
+                    return rolledLootList;
+                }   
+            }
+            return new List<Item>();
+        }
+
+        public List<Item> RollLoot(int count)
+        {
+            List<Item> rolledLootList = new List<Item>();
+            for (int i = 0; i < count; ++i)
+            {
+                rolledLootList.AddRange(RollLoot());
+            }
+            return rolledLootList;
         }
 
         public override void Accept(IVisitor visitor)
