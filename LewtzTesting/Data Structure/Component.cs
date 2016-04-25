@@ -14,6 +14,8 @@ namespace LewtzTesting.Data_Structure
         [JsonProperty("book")]
         public string Book { get; protected set; }
 
+        public ItemTypes Types { get; protected set; }
+
         public abstract void Accept(IVisitor visitor);
 
         public override string ToString()

@@ -46,11 +46,10 @@ namespace LewtzTesting.Data_Structure
         }
 
         private System.Random rand = new System.Random();
-        public List<Item> RollLoot()
+        public List<Component> RollLoot()
         {
-            List<Item> rolledLootList = new List<Item>();
+            List<Component> rolledLootList = new List<Component>();
 
-            
             int maxProb = _children.Max(x => x.Probability);
 
             int roll = rand.Next(0, maxProb);
@@ -65,21 +64,32 @@ namespace LewtzTesting.Data_Structure
                     if(comp is Item)
                     {
                         rolledLootList.Add((Item)comp);
-                        
                     }
+
                     if(comp is MagicItem)
                     {
-                        //build magic item here and shiz
+                        ((MagicItem)comp).SetAbilityTable();
+                        ((MagicItem)comp).Build();
+                        rolledLootList.Add(comp);
+                    }
+
+                    if(comp.Name.Contains("roll again"))
+                    {
+                        rolledLootList.AddRange(this.RollLoot());
+                        if (comp.Name.Contains("twice"))
+                        {
+                            rolledLootList.AddRange(this.RollLoot());
+                        }
                     }
                     return rolledLootList;
                 }   
             }
-            return new List<Item>();
+            return new List<Component>();
         }
 
-        public List<Item> RollLoot(int count)
+        public List<Component> RollLoot(int count)
         {
-            List<Item> rolledLootList = new List<Item>();
+            List<Component> rolledLootList = new List<Component>();
             for (int i = 0; i < count; ++i)
             {
                 rolledLootList.AddRange(RollLoot());

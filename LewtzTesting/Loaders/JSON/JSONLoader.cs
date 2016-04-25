@@ -48,6 +48,12 @@ namespace LewtzTesting.Loaders.JSON
                 {
                     var newTable = table.ToObject<Table>(); //includes base case "probability"
 
+                    var rollAgainText = ", roll again";
+                    if (newTable.Name.Contains(rollAgainText))
+                    {
+                        newTable.Name.Replace(rollAgainText, "");
+                    }
+
                     string newFilename = filename.Replace(currentTableName, newTable.Name);
 
                     var probabilityList = getProbabilityListFromNode(table);
@@ -57,7 +63,6 @@ namespace LewtzTesting.Loaders.JSON
                     {
                         var p = probabilityList[i];
                         
-
                         var diffName = newTable.Name + p.Name.Replace("probability","");
 
                         var diffProbability = (int)p;

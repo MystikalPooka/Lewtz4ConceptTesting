@@ -14,6 +14,7 @@ namespace LewtzTesting.Data_Structure
 
         public override void Accept(IVisitor visitor)
         {
+            visitor.Visit(this);
         }
     }
 }

@@ -32,16 +32,18 @@ namespace LewtzTesting
             var j = new JSONLoader();
             var baseTable = new Table("Weapons");
             j.LoadTableFromFile(@"E:\Coding\Visual Studio Projects\LewtzTesting\LewtzTesting\Tables\weapons.json", baseTable);
-           var printTree = new PrintEntireTreeVisitor();
 
-            //baseTable.Accept(printTree);
+            j.LoadTableFromFile(@"E:\Coding\Visual Studio Projects\LewtzTesting\LewtzTesting\Tables\weapons.json", baseTable);
+            var printTree = new PrintEntireTreeVisitor();
 
-            var lootList = baseTable.RollLoot(7);
+            baseTable.Accept(printTree);
 
-            foreach(Item item in lootList)
-            {
-                Console.WriteLine("ROLLED ITEM " + item);
-            }
+            //var lootList = baseTable.RollLoot(7);
+
+            //foreach(Item item in lootList)
+            //{
+            //    Console.WriteLine("ROLLED ITEM " + item);
+            //}
 
             Console.ReadLine();
         }
