@@ -9,6 +9,10 @@ namespace LewtzTesting.Data_Structure
     {
         private ItemNode _baseItem;
         private Table _abilityTable;
+        public void setAbilityTable(Table table)
+        {
+            _abilityTable = table;
+        }
         private List<Component> _appliedAbilities;
 
         MagicItem(ItemNode item, Table abilityTable)

@@ -1,23 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using LewtzTesting.Data_Structure;
+using System.Linq;
 
 namespace LewtzTesting.Visitors
 {
     class GetLootVisitor : IVisitor
     {
-        private IList<Item> lootBag;
-
+        private IList<ItemNode> lootBag;
+        
         public GetLootVisitor()
         {
-            lootBag = new List<Item>();
+            lootBag = new List<ItemNode>();
         }
 
+        private Random rand = new Random();
         public void Visit(Table table)
         {
-            Random rand = new Random();
+            var children = table.GetChildren();
+            int maxProb = children.Max(x => x.Probability);
+            int roll = rand.Next(0, maxProb);
 
-            var randIndex = rand.Next();
+            for(int i = 0; i < table.RollCount; ++i)
+            {
+                foreach (Component comp in children)
+                {
+                    if (comp.Probability > roll)
+                    {
+                        comp.Accept(this);
+                        break;
+                    }
+                }
+            }
         }
 
         public void Visit(Ability ability)
@@ -27,12 +41,13 @@ namespace LewtzTesting.Visitors
 
         public void Visit(MagicItem item)
         {
-            throw new NotImplementedException();
+            item.Build();
+            lootBag.Add(item);
         }
 
         public void Visit(Item item)
         {
-            throw new NotImplementedException();
+            lootBag.Add(item);
         }
     }
 }

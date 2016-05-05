@@ -11,10 +11,10 @@ namespace LewtzTesting.Loaders.JSON
     {
         private IDictionary<string, Component> _referenceDictionary;
 
-        //public JSONLoader(IDictionary<string, Component> refDict)
-        //{
-        //    _referenceDictionary = refDict;
-        //}
+        public JSONLoader()
+        {
+            _referenceDictionary = new Dictionary<string, Component>();
+        }
 
         public void LoadTableFromFile(string filename, Table tableToAddTo = null)
         {
@@ -31,12 +31,23 @@ namespace LewtzTesting.Loaders.JSON
             {
                 var itemsToAdd =
                         from item in token.Children<JObject>()
-                        where item.Value<string>("type") == "item" || item.Value<string>("type") == "MagicItem"
+                        where item.Value<string>("type").Contains("item")
                         select item;
 
                 foreach(var item in itemsToAdd)
                 {
-                    tableToAddTo.Add(item.ToObject<Item>());
+                    var itemType = item.Value<string>("type");
+                    ItemNode newItem;
+                    if (itemType.Contains("magic"))
+                    {
+                        newItem = item.ToObject<MagicItem>();
+                        ((MagicItem)newItem).setAbilityTable(new Table()); //THIS NEEDS TO BE BASE MAGIC TABLE
+                    }
+                    else
+                    {
+                        newItem = item.ToObject<Item>();
+                    }
+                    tableToAddTo.Add(newItem);
                 }
 
                 var tablesToLoad =
@@ -48,10 +59,9 @@ namespace LewtzTesting.Loaders.JSON
                 {
                     var newTable = table.ToObject<Table>(); //includes base case "probability"
 
-                    var rollAgainText = ", roll again";
-                    if (newTable.Name.Contains(rollAgainText))
+                    if (newTable.Name.Contains(", roll again"))
                     {
-                        newTable.Name.Replace(rollAgainText, "");
+                        newTable.Name.Replace(", roll again", "");
                     }
 
                     string newFilename = filename.Replace(currentTableName, newTable.Name);
