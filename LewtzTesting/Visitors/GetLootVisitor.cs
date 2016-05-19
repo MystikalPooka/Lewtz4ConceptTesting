@@ -41,8 +41,13 @@ namespace LewtzTesting.Visitors
 
         public void Visit(MagicItem item)
         {
-            item.Build();
+            //roll base magic table
             lootBag.Add(item);
+        }
+
+        private void rollLoot(int count)
+        {
+
         }
 
         public void Visit(Item item)

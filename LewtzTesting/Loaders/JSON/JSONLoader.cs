@@ -1,6 +1,5 @@
 ﻿using LewtzTesting.Data_Structure;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +17,9 @@ namespace LewtzTesting.Loaders.JSON
 
         public void LoadTableFromFile(string filename, Table tableToAddTo = null)
         {
+            //
+            //TODO: LOAD MAGIC TABLES FIRST, THEN PASS THAT TO EVERY MAGIC ITEM
+            //
             var json = File.ReadAllText(filename);
             JToken token = JToken.Parse(json);
 
@@ -38,15 +40,7 @@ namespace LewtzTesting.Loaders.JSON
                 {
                     var itemType = item.Value<string>("type");
                     ItemNode newItem;
-                    if (itemType.Contains("magic"))
-                    {
-                        newItem = item.ToObject<MagicItem>();
-                        ((MagicItem)newItem).setAbilityTable(new Table()); //THIS NEEDS TO BE BASE MAGIC TABLE
-                    }
-                    else
-                    {
-                        newItem = item.ToObject<Item>();
-                    }
+                    newItem = item.ToObject<Item>();
                     tableToAddTo.Add(newItem);
                 }
 
@@ -78,7 +72,6 @@ namespace LewtzTesting.Loaders.JSON
                         var diffProbability = (int)p;
                         if (diffProbability > 0)
                         {
-                            var testPrint = new Visitors.PrintEntireTreeVisitor();
                             var diffProbTable = new Table(diffName, diffProbability, newTable.Book);
                             LoadTableFromFile(newFilename, diffProbTable);
                             tableToAddTo.Add(diffProbTable);
@@ -99,7 +92,7 @@ namespace LewtzTesting.Loaders.JSON
             var name = filename.Substring(indexOfLastSlash + 1, length);
 
             return name;
-        } 
+        }
 
         private List<JProperty> getProbabilityListFromNode(JToken node)
         {
@@ -107,7 +100,6 @@ namespace LewtzTesting.Loaders.JSON
                    from p in node.Children<JProperty>()
                    where p.Name.StartsWith("probability")
                    select p;
-            //Console.WriteLine("Count: " + probabilities.Count());
             return probabilities.ToList();
         }
     }
