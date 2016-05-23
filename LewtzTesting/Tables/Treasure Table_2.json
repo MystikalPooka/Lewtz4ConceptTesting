@@ -1,0 +1,22 @@
+[
+	{
+	  "name":"nothing",
+	  "book":"DMG216",
+	  "probability":1,
+	  "type":"item"
+	},
+	{
+	  "name":"mundane items",
+	  "book":"DMG216",
+	  "probability":25,
+	  "type":"table",
+	  "count":1
+	},
+	{
+	  "name":"minor magic item",
+	  "book":"DMG216",
+	  "probability":100,
+	  "type":"magic item",
+	  "count":1
+	}
+]

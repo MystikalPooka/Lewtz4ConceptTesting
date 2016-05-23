@@ -11,9 +11,9 @@ namespace LewtzTesting
         {
             var j = new JSONLoader();
             var baseTable = new Table("Treasure Table");
-            j.LoadTableFromFile(@"Tables\treasure table.json", baseTable);
+            j.LoadTableFromFile(@"..\..\Tables\treasure table.json", baseTable);
             var baseMagicTable = new Table("Magic Base");
-            j.LoadTableFromFile(@"Tables\magic base.json", baseMagicTable);
+            j.LoadTableFromFile(@"..\..\Tables\magic base.json", baseMagicTable);
 
             var printTree = new PrintEntireTreeVisitor();
 
