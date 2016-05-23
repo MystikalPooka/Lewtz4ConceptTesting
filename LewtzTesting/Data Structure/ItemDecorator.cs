@@ -1,7 +1,7 @@
 ﻿namespace LewtzTesting.Data_Structure
 {
-    public abstract class ItemDecorator : ItemNode
+    public abstract class ItemDecorator : Item
     {
-        private ItemNode _baseItem { get; }
+        private Item _baseItem { get; }
     }
 }

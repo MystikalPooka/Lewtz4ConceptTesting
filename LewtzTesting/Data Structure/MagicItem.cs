@@ -3,18 +3,33 @@ using LewtzTesting.Visitors;
 
 namespace LewtzTesting.Data_Structure
 {
-    public class MagicItem : ItemDecorator
+    public class MagicItem : Item
     {
-        private ItemNode _baseItem;
         private List<Component> _appliedAbilities;
+        public Dictionary<string, Table> ReferenceDictionary { get; set; }
 
-        MagicItem(ItemNode item, Table abilityTable)
+       public MagicItem(Dictionary<string, Table> referenceDict)
         {
-            _baseItem = item;
-            this.Name = item.Name;
-            this.Probability = item.Probability;
-            this.Cost = item.Cost;
             _appliedAbilities = new List<Component>();
+            ReferenceDictionary = referenceDict;
+            Types |= ItemTypes.Magic;
+        }
+
+        public MagicItem()
+        {
+            _appliedAbilities = new List<Component>();
+            Types |= ItemTypes.Magic;
+        }
+
+        public void Build()
+        {
+            Table magicTable = new Table();
+            var abilitiesVisitor = new GetLootVisitor();
+            if (ReferenceDictionary.TryGetValue("Magic Base", out magicTable))
+            {
+                magicTable.Accept(abilitiesVisitor);
+                _appliedAbilities.AddRange(abilitiesVisitor.GetLootBag());
+            }
         }
 
         public override void Accept(IVisitor visitor)
@@ -24,19 +39,15 @@ namespace LewtzTesting.Data_Structure
 
         public override string ToString()
         {
-
-            return base.ToString() +" Abilities: \r\n \t"+ GetAbilityNames();
+            return base.ToString() + Types.ToString() + " Abilities: \r\n \t"+ GetAbilityNames();
         }
 
         private string GetAbilityNames()
         {
             string abilities = "";
-            if(_appliedAbilities.Count > 0)
+            foreach(Component comp in _appliedAbilities)
             {
-                foreach(Ability comp in _appliedAbilities)
-                {
-                    abilities += comp.Name + "\r\n";
-                }
+                abilities += comp.Name + "\r\n";
             }
             return abilities;
         }

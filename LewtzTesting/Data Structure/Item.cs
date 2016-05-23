@@ -1,31 +1,12 @@
-﻿using LewtzTesting.Visitors;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-
-namespace LewtzTesting.Data_Structure
+﻿namespace LewtzTesting.Data_Structure
 {
-    public class Item : ItemNode
+    public abstract class Item : Component
     {
-        public Item()
-        {
-            Name = "Unnamed Item";
-            Probability = 0;
-            Book = "";
-        }
+        public int Cost { get; set; }
 
-        public Item(string name, int prob, int cost = 0, string book = "")
+        public override string ToString()
         {
-            Name = name;
-            Probability = prob;
-            Cost = cost;
-            Book = book;
-        }
-
-        public override void Accept(IVisitor visitor)
-        {
-            visitor.Visit(this);
+            return base.ToString() + " | Cost: " + Cost;
         }
     }
 }

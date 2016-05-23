@@ -7,26 +7,32 @@ namespace LewtzTesting.Visitors
 {
     class GetLootVisitor : IVisitor
     {
-        private IList<ItemNode> lootBag;
-        
-        public GetLootVisitor()
+        private IList<Component> lootBag;
+        public List<Component> GetLootBag()
         {
-            lootBag = new List<ItemNode>();
+            return (List<Component>)lootBag;
         }
 
-        private Random rand = new Random();
+        private static Random rand = new Random();
+        public GetLootVisitor()
+        {
+            lootBag = new List<Component>();
+        }
+
+        
         public void Visit(Table table)
         {
             var children = table.GetChildren();
             int maxProb = children.Max(x => x.Probability);
-            int roll = rand.Next(0, maxProb);
-
+            
             for(int i = 0; i < table.RollCount; ++i)
             {
+                int roll = rand.Next(0, maxProb);
                 foreach (Component comp in children)
                 {
                     if (comp.Probability > roll)
                     {
+                        if (comp.Name.Contains("roll again")) table.RollCount++;
                         comp.Accept(this);
                         break;
                     }
@@ -36,21 +42,18 @@ namespace LewtzTesting.Visitors
 
         public void Visit(Ability ability)
         {
-            throw new NotImplementedException();
+            lootBag.Add(ability);
         }
 
         public void Visit(MagicItem item)
         {
-            //roll base magic table
-            lootBag.Add(item);
+            var itemToBuild = new MagicItem(item.ReferenceDictionary);
+            itemToBuild.Build();
+            lootBag.Add(itemToBuild);
+            //copies the same exact thing
         }
 
-        private void rollLoot(int count)
-        {
-
-        }
-
-        public void Visit(Item item)
+        public void Visit(MundaneItem item)
         {
             lootBag.Add(item);
         }

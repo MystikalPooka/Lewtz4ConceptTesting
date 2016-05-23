@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 
 namespace LewtzTesting.Data_Structure
 {
     [Flags()]
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ItemTypes
     {
         None = 0,
@@ -25,6 +28,10 @@ namespace LewtzTesting.Data_Structure
         Gem = 1 << 16,
         Art = 1 << 17,
         Ability = 1 << 18,
-        Weapon = Melee_Weapon | Ranged_Weapon
+        Minor_Magic = 1 << 19 | Magic,
+        Medium_Magic = 1 << 20 | Magic,
+        Major_Magic = 1 << 21 | Magic,
+        Weapon = Melee_Weapon | Ranged_Weapon,
+        Table = 1 << 22
     }
 }

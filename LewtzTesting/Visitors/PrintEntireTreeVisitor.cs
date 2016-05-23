@@ -23,7 +23,7 @@ namespace LewtzTesting.Visitors
                 Console.Write("|-");
                 indent += "|  ";
             }
-            Console.WriteLine(comp.GetType().Name + " - " + comp.Name + " Prob: " + comp.Probability);
+            Console.WriteLine(comp.GetType().Name + " - " + comp.Name + " Prob: " + comp.Probability + " Types: " + comp.Types);
 
             if(comp is Table)
             {
@@ -33,7 +33,7 @@ namespace LewtzTesting.Visitors
             }
         }
 
-        public void Visit(Item item)
+        public void Visit(MundaneItem item)
         {
         }
 

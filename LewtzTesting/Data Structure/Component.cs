@@ -6,7 +6,7 @@ namespace LewtzTesting.Data_Structure
     public abstract class Component : IVisitable
     {
         [JsonProperty("name")]
-        public string Name { get; protected set; }
+        public string Name { get; set; }
 
         [JsonProperty("probability")]
         public int Probability { get; protected set; }
@@ -14,13 +14,14 @@ namespace LewtzTesting.Data_Structure
         [JsonProperty("book")]
         public string Book { get; protected set; }
 
-        public ItemTypes Types { get; protected set; }
+        [JsonProperty("item types")]
+        public ItemTypes Types { get; set; }
 
         public abstract void Accept(IVisitor visitor);
 
         public override string ToString()
         {
-            return this.GetType().Name +": " + Name + " | Probability: " + Probability + " | Book: " + Book;
+            return this.GetType().Name +": " + Name + " | Prob: " + Probability + " | Book: " + Book;
         }
     }
 }

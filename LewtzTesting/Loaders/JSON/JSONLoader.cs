@@ -3,23 +3,21 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System;
 
 namespace LewtzTesting.Loaders.JSON
 {
     public class JSONLoader : ILoader
     {
-        private IDictionary<string, Component> _referenceDictionary;
+        private Dictionary<string, Table> _referenceDictionary = new Dictionary<string, Table>();
 
         public JSONLoader()
         {
-            _referenceDictionary = new Dictionary<string, Component>();
+            //_referenceDictionary = new Dictionary<string, Table>();
         }
 
         public void LoadTableFromFile(string filename, Table tableToAddTo = null)
         {
-            //
-            //TODO: LOAD MAGIC TABLES FIRST, THEN PASS THAT TO EVERY MAGIC ITEM
-            //
             var json = File.ReadAllText(filename);
             JToken token = JToken.Parse(json);
 
@@ -28,19 +26,29 @@ namespace LewtzTesting.Loaders.JSON
             {
                 tableToAddTo = new Table(currentTableName);
             }
+            addToDictionary(tableToAddTo);
 
             if (token != null)
             {
                 var itemsToAdd =
                         from item in token.Children<JObject>()
-                        where item.Value<string>("type").Contains("item")
+                        where item.Value<string>("type").ToLower().Contains("item")
                         select item;
 
                 foreach(var item in itemsToAdd)
                 {
                     var itemType = item.Value<string>("type");
-                    ItemNode newItem;
-                    newItem = item.ToObject<Item>();
+                    Item newItem;
+
+                    if (itemType.ToLower().Contains("magic"))
+                    {
+                        newItem = item.ToObject<MagicItem>();
+                        ((MagicItem)newItem).ReferenceDictionary = _referenceDictionary;
+                    }
+                    else
+                    {
+                        newItem = item.ToObject<MundaneItem>();
+                    }
                     tableToAddTo.Add(newItem);
                 }
 
@@ -51,35 +59,37 @@ namespace LewtzTesting.Loaders.JSON
                 
                 foreach (var table in tablesToLoad)
                 {
-                    var newTable = table.ToObject<Table>(); //includes base case "probability"
-
-                    if (newTable.Name.Contains(", roll again"))
-                    {
-                        newTable.Name.Replace(", roll again", "");
-                    }
-
-                    string newFilename = filename.Replace(currentTableName, newTable.Name);
-
                     var probabilityList = getProbabilityListFromNode(table);
-
                     //make a new table for each probability
                     for(int i = 0; i < probabilityList.Count; ++i)
                     {
+                        var newTable = table.ToObject<Table>(); //includes base case "probability"
+
+                        string newFilename = filename.Replace(currentTableName, newTable.Name.Replace(", roll again", ""));
                         var p = probabilityList[i];
                         
-                        var diffName = newTable.Name + p.Name.Replace("probability","");
+                        newTable.Name = newTable.Name + p.Name.Replace("probability","");
 
                         var diffProbability = (int)p;
                         if (diffProbability > 0)
                         {
-                            var diffProbTable = new Table(diffName, diffProbability, newTable.Book);
-                            LoadTableFromFile(newFilename, diffProbTable);
-                            tableToAddTo.Add(diffProbTable);
-                            diffProbTable.Sort();
+                            tableToAddTo.Add(newTable);
+                            LoadTableFromFile(newFilename, newTable);
+                            newTable.Sort();
                         }
-                        newTable.Sort();
                     }
-                    tableToAddTo.Sort();
+                }
+            }
+            tableToAddTo.Sort();
+        }
+
+        private void addToDictionary(Table table)
+        {
+            if(table != null)
+            {
+                if(!_referenceDictionary.ContainsKey(table.Name))
+                {
+                    _referenceDictionary.Add(table.Name, table);
                 }
             }
         }

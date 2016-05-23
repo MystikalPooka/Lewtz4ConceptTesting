@@ -2,71 +2,73 @@
 	{
 	  "name":"armor and shields",
 	  "book":"DMG216",
-	  "probability_minor":4,
+	  "probability":4,
 	  "probability_medium":10,
 	  "probability_major":10,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"weapons",
 	  "book":"DMG216",
-	  "probability_minor":9,
+	  "probability":29,
 	  "probability_medium":20,
 	  "probability_major":20,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"potions",
 	  "book":"DMG216",
-	  "probability_minor":44,
+	  "probability":44,
 	  "probability_medium":30,
 	  "probability_major":25,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"rings",
 	  "book":"DMG216",
-	  "probability_minor":46,
+	  "probability":46,
 	  "probability_medium":40,
 	  "probability_major":35,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"rods",
 	  "book":"DMG216",
+	  "probability":65,
 	  "probability_medium":50,
 	  "probability_major":45,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"scrolls",
 	  "book":"DMG216",
-	  "probability_minor":81,
+	  "probability":81,
 	  "probability_medium":65,
 	  "probability_major":55,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"staffs",
 	  "book":"DMG216",
+	  "probability":86,
 	  "probability_medium":68,
 	  "probability_major":75,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"wands",
 	  "book":"DMG216",
-	  "probability_minor":91,
+	  "probability":91,
 	  "probability_medium":83,
 	  "probability_major":80,
-	  "type":"table"
+	  "type":"item"
 	},
 	{
 	  "name":"wondrous items",
 	  "book":"DMG216",
-	  "probability_minor":100,
+	  "probability":100,
 	  "probability_medium":100,
 	  "probability_major":100,
-	  "type":"table"
+	  "type":"item"
 	},
 ]

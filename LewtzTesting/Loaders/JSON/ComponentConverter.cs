@@ -25,7 +25,7 @@ namespace LewtzTesting.Loaders.JSON
             }
             if (token["type"].Value<string>() == "item")
             {
-                return token.ToObject<Item>(serializer);
+                return token.ToObject<MundaneItem>(serializer);
             }
 
             return null;
