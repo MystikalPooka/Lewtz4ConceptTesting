@@ -28,7 +28,14 @@ namespace LewtzTesting.Data_Structure
             if (ReferenceDictionary.TryGetValue("Magic Base", out magicTable))
             {
                 magicTable.Accept(abilitiesVisitor);
-                _appliedAbilities.AddRange(abilitiesVisitor.GetLootBag());
+                var abilityBag = abilitiesVisitor.GetLootBag();
+                if(abilityBag.Count > 0)
+                {
+                    Types |= abilityBag[0].Types;
+                    //Name = ROLL ON TABLE TO DETERMINE ITEM (based on originally rolled item type)
+                    _appliedAbilities.AddRange(abilityBag);
+                }
+                
             }
         }
 

@@ -23,18 +23,22 @@ namespace LewtzTesting.Visitors
         public void Visit(Table table)
         {
             var children = table.GetChildren();
-            int maxProb = children.Max(x => x.Probability);
-            
-            for(int i = 0; i < table.RollCount; ++i)
+
+            if(children.Count != 0)
             {
-                int roll = rand.Next(0, maxProb);
-                foreach (Component comp in children)
+                int maxProb = children.Max(x => x.Probability);
+
+                for (int i = 0; i < table.RollCount; ++i)
                 {
-                    if (comp.Probability > roll)
+                    int roll = rand.Next(0, maxProb);
+                    foreach (Component comp in children)
                     {
-                        if (comp.Name.Contains("roll again")) table.RollCount++;
-                        comp.Accept(this);
-                        break;
+                        if (comp.Probability > roll)
+                        {
+                            if (comp.Name.Contains("roll again")) table.RollCount++;
+                            comp.Accept(this);
+                            break;
+                        }
                     }
                 }
             }
@@ -55,7 +59,11 @@ namespace LewtzTesting.Visitors
 
         public void Visit(MundaneItem item)
         {
-            lootBag.Add(item);
+            if(item.Name.ToLower() != "nothing")
+            {
+                lootBag.Add(item);
+            }
+            
         }
     }
 }

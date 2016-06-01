@@ -1,23 +1,29 @@
 [
 	{
-	  "name":"arrows(20)",
+	  "name":"arrow",
 	  "book":"PHB114",
 	  "cost":100,
 	  "probability":50,
-	  "type":"item"
+	  "type":"item",
+	  "item types": "Ammunition",
+	  "count":20
 	},
 	{
-	  "name":"bolts, crossbow(10)",
+	  "name":"bolt, crossbow",
 	  "book":"PHB115",
 	  "cost":100,
 	  "probability":80,
-	  "type":"item"
+	  "type":"item",
+	  "item types": "Ammunition",
+	  "count":10
 	},
 	{
-	  "name":"bullets, sling(10)",
+	  "name":"bullet, sling",
 	  "book":"PHB115",
 	  "cost":10,
 	  "probability":100,
-	  "type":"item"
+	  "type":"item",
+	  "item types": "Ammunition",
+	  "count":10
 	}
 ]

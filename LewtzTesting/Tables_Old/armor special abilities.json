@@ -5,8 +5,7 @@
 	  "probability_minor":25,
 	  "probability_medium":5,
 	  "probability_major":3,
-	  "type":"ability",
-	  "cost":270000
+	  "type":"ability"
 	},
 	{
 	  "name":"fortification, light",
@@ -14,40 +13,35 @@
 	  "probability_minor":32,
 	  "probability_medium":8,
 	  "probability_major":4,
-	  "type":"ability",
-	  "bonus":1
+	  "type":"ability"
 	},
 	{
 	  "name":"slick",
 	  "book":"DMG217",
 	  "probability_minor":52,
 	  "probability_medium":11,
-	  "type":"ability",
-	  "cost":375000
+	  "type":"ability"
 	},
 	{
 	  "name":"shadow",
 	  "book":"DMG217",
 	  "probability_minor":72,
 	  "probability_medium":14,
-	  "type":"ability",
-	  "cost":375000
+	  "type":"ability"
 	},
 	{
 	  "name":"silent moves",
 	  "book":"DMG217",
 	  "probability_minor":92,
 	  "probability_medium":17,
-	  "type":"ability",
-	  "cost":37500
+	  "type":"ability"
 	},
 	{
 	  "name":"spell resistance (13)",
 	  "book":"DMG217",
 	  "probability_minor":96,
 	  "probability_medium":19,
-	  "type":"ability",
-	  "bonus":2
+	  "type":"ability"
 	},
 	{
 	  "name":"slick, improved",
@@ -55,8 +49,7 @@
 	  "probability_minor":97,
 	  "probability_medium":29,
 	  "probability_major":7,
-	  "type":"ability",
-	  "cost":1500000
+	  "type":"ability"
 	},
 	{
 	  "name":"shadow, improved",
@@ -64,8 +57,7 @@
 	  "probability_minor":98,
 	  "probability_medium":39,s
 	  "probability_major":10,
-	  "type":"ability",
-	  "cost":1500000
+	  "type":"ability"
 	},
 	{
 	  "name":"silent moves, improved",
@@ -73,109 +65,95 @@
 	  "probability_minor":99,
 	  "probability_medium":49,
 	  "probability_major":13,
-	  "type":"ability",
-	  "cost":1500000
+	  "type":"ability"
 	},
 	{
 	  "name":"acid resistance",
 	  "book":"DMG217",
 	  "probability_medium":54,
 	  "probability_major":16,
-	  "type":"ability",
-	  "cost":1800000
+	  "type":"ability"
 	},
 	{
 	  "name":"cold resistance",
 	  "book":"DMG217",
 	  "probability_medium":59,
 	  "probability_major":19,
-	  "type":"ability",
-	  "cost":1800000
+	  "type":"ability"
 	},
 	{
-	  "name":"electricity resistance",
+	  "name":"electricty resistance",
 	  "book":"DMG217",
 	  "probability_medium":64,
 	  "probability_major":22,
-	  "type":"ability",
-	  "cost":1800000
+	  "type":"ability"
 	},
 	{
 	  "name":"fire resistance",
 	  "book":"DMG217",
 	  "probability_medium":69,
 	  "probability_major":25,
-	  "type":"ability",
-	  "cost":1800000
+	  "type":"ability"
 	},
 	{
 	  "name":"sonic resistance",
 	  "book":"DMG217",
 	  "probability_medium":74,
 	  "probability_major":28,
-	  "type":"ability",
-	  "cost":1800000
+	  "type":"ability"
 	},
 	{
 	  "name":"ghost touch",
 	  "book":"DMG217",
 	  "probability_medium":79,
 	  "probability_major":33,
-	  "type":"ability",
-	  "bonus":3
+	  "type":"ability"
 	},
 	{
 	  "name":"invulnerability",
 	  "book":"DMG217",
 	  "probability_medium":84,
 	  "probability_major":35,
-	  "type":"ability",
-	  "bonus":3
+	  "type":"ability"
 	},
 	{
 	  "name":"fortification, moderate",
 	  "book":"DMG217",
 	  "probability_medium":89,
 	  "probability_major":40,
-	  "type":"ability",
-	  "bonus":3
+	  "type":"ability"
 	},
 	{
 	  "name":"spell resistance",
 	  "book":"DMG217",
 	  "probability_medium":94,
 	  "probability_major":42,
-	  "type":"ability",
-	  "bonus":3
+	  "type":"ability"
 	},
 	{
 	  "name":"wild",
 	  "book":"DMG217",
 	  "probability_medium":99,
 	  "probability_major":43,
-	  "type":"ability",
-	  "bonus":3
+	  "type":"ability"
 	},
 	{
 	  "name":"slick, greater",
 	  "book":"DMG217",
 	  "probability_major":48,
-	  "type":"ability",
-	  "cost":3375000
+	  "type":"ability"
 	},
 	{
 	  "name":"shadow, greater",
 	  "book":"DMG217",
 	  "probability_major":53,
-	  "type":"ability",
-	  "cost":3375000
+	  "type":"ability"
 	},
 	{
 	  "name":"silent moves, greater",
 	  "book":"DMG217",
 	  "probability_major":58,
-	  "type":"ability",
-	  "cost":3375000
+	  "type":"ability"
 	},
 	{
 	  "name":"acid resistance, improved",
@@ -187,99 +165,85 @@
 	  "name":"cold resistance, improved",
 	  "book":"DMG217",
 	  "probability_major":68,
-	  "type":"ability",
-	  "cost":4200000
+	  "type":"ability"
 	},
 	{
-	  "name":"electricity resistance, improved",
+	  "name":"electricty resistance, improved",
 	  "book":"DMG217",
 	  "probability_major":73,
-	  "type":"ability",
-	  "cost":4200000
+	  "type":"ability"
 	}
 	{
 	  "name":"fire resistance, improved",
 	  "book":"DMG217",
 	  "probability_major":78,
-	  "type":"ability",
-	  "cost":4200000
+	  "type":"ability"
 	},
 	{
 	  "name":"sonic resistance, improved",
 	  "book":"DMG217",
 	  "probability_major":83,
-	  "type":"ability",
-	  "cost":4200000
+	  "type":"ability"
 	},
 	{
 	  "name":"spell resistance (17)",
 	  "book":"DMG217",
 	  "probability_major":88,
-	  "type":"ability",
-	  "bonus":4
+	  "type":"ability"
 	},
 	{
 	  "name":"etherealness",
 	  "book":"DMG217",
 	  "probability_major":89,
-	  "type":"ability",
-	  "cost":4900000
+	  "type":"ability"
 	},
 	{
 	  "name":"undead controlling",
 	  "book":"DMG217",
 	  "probability_major":90,
-	  "type":"ability",
-	  "cost":4900000
+	  "type":"ability"
 	},
 	{
 	  "name":"fortification, heavy",
 	  "book":"DMG217",
 	  "probability_major":92,
-	  "type":"ability",
-	  "bonus":5
+	  "type":"ability"
 	},
 	{
 	  "name":"spell resistance (19)",
 	  "book":"DMG217",
 	  "probability_major":94,
-	  "type":"ability",
-	  "bonus":5
+	  "type":"ability"
 	},
 	{
 	  "name":"acid resistance, greater",
 	  "book":"DMG217",
 	  "probability_major":95,
-	  "type":"ability",
-	  "cost":6600000
+	  "type":"ability"
 	},
 	{
 	  "name":"cold resistance, greater",
 	  "book":"DMG217",
 	  "probability_major":96,
-	  "type":"ability",
-	  "cost":6600000
+	  "type":"ability"
 	},
 	{
-	  "name":"electricity resistance, greater",
+	  "name":"electricty resistance, greater",
 	  "book":"DMG217",
 	  "probability_major":97,
-	  "type":"ability",
-	  "cost":6600000
+	  "type":"ability"
 	},
 	{
 	  "name":"fire resistance, greater",
 	  "book":"DMG217",
 	  "probability_major":98,
-	  "type":"ability",
-	  "cost":6600000
+	  "type":"ability"
 	},
 	{
 	  "name":"sonic resistance, greater",
 	  "book":"DMG217",
 	  "probability_major":99,
-	  "type":"ability",
-	  "cost":6600000
+	  "type":"ability"
 	},
 	{
 	  "name":"roll again twice",

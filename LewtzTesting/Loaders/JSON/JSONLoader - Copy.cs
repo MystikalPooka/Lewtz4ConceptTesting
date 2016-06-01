@@ -1,5 +1,5 @@
-﻿
-using LewtzTesting.Data_Structure;
+﻿using LewtzTesting.Data_Structure;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -7,72 +7,35 @@ using System.Linq;
 
 namespace LewtzTesting.Loaders.JSON
 {
-    public class JSONLoader : ILoader
+    public class JSONLoader2 : ILoader
     {
         private static Dictionary<string, Table> _referenceDictionary = new Dictionary<string, Table>();
 
         public void LoadTableFromFile(string filename, Table tableToAddTo = null)
         {
-            try
-            {
-                var json = File.ReadAllText(filename);
-                JToken token = JToken.Parse(json);
+            var json = File.ReadAllText(filename);
+            JToken token = JToken.Parse(json);
 
-                var currentTableName = getNameFromFilename(filename);
+            if (token != null)
+            {
                 if (tableToAddTo == null)
                 {
+                    var currentTableName = getNameFromFilename(filename);
                     tableToAddTo = new Table(currentTableName);
                 }
-                addToDictionary(tableToAddTo);
-
-                if (token != null)
-                {
-                    loadAllItemstoTable(tableToAddTo, token);
-                    loadAllTablesFromTokenAndFile(tableToAddTo, token, filename);
-                }
+                loadAllItemsToTable(token, tableToAddTo);
+                //loadSubtablesToTable(token, tableToAddTo, filename);
                 tableToAddTo.Sort();
-            }
-            catch(FileNotFoundException e)
-            {
-                
+                addToDictionary(tableToAddTo);
             }
         }
 
-        private void loadAllTablesFromTokenAndFile(Table tableToAddTo, JToken token, string filename)
-        {
-            var tablesToLoad =
-                    from table in token.Children<JObject>()
-                    where table.Value<string>("type") == "table"
-                    select table;
-
-            foreach (var table in tablesToLoad)
-            {
-                var probabilityList = getProbabilityListFromNode(table);
-                //make a new table for each probability
-                for (int i = 0; i < probabilityList.Count; ++i)
-                {
-                    var newTable = table.ToObject<Table>(); //includes base case "probability"
-                    string newFilename = filename.Replace(tableToAddTo.Name.ToLower(), newTable.Name.Replace(", roll again", ""));
-
-                    var p = probabilityList[i];
-
-                    var diffProbability = (int)p;
-                    if (diffProbability > 0)
-                    {
-                        tableToAddTo.Add(newTable);
-                        LoadTableFromFile(newFilename, newTable);
-                        newTable.Sort();
-                    }
-                }
-            }
-        }
-
-        private static void loadAllItemstoTable(Table tableToAddTo, JToken token)
+        private void loadAllItemsToTable(JToken token, Table table)
         {
             var itemsToAdd =
-                from item in token.Children<JObject>()
-                where item.Value<string>("type").ToLower().Contains("item")
-                select item;
+                        from item in token.Children<JObject>()
+                        where item.Value<string>("type").ToLower().Contains("item")
+                        select item;
 
             foreach (var item in itemsToAdd)
             {
@@ -88,15 +51,46 @@ namespace LewtzTesting.Loaders.JSON
                 {
                     newItem = item.ToObject<MundaneItem>();
                 }
-                tableToAddTo.Add(newItem);
+                table.Add(newItem);
+            }
+        }
+
+        private void loadSubtablesToTable(JToken token, Table tableToAddTo, string filename)
+        {
+            var tablesToLoad =
+                    from table in token.Children<JObject>()
+                    where table.Value<string>("type") == "table"
+                    select table;
+
+            foreach (var table in tablesToLoad)
+            {
+                var probabilityList = getProbabilityListFromNode(table);
+                //make a new table for each probability
+                for (int i = 0; i < probabilityList.Count; ++i)
+                {
+                    var newTable = table.ToObject<Table>(); //includes base case "probability"
+
+                    string newFilename = filename.Replace(tableToAddTo.Name, newTable.Name.Replace(", roll again", ""));
+
+                    var p = probabilityList[i];
+                    newTable.Name = newTable.Name + p.Name.Replace("probability", "");
+
+                    var diffProbability = (int)p;
+                    if (diffProbability > 0)
+                    {
+                        tableToAddTo.Add(newTable);
+                        LoadTableFromFile(newFilename, newTable);
+                        newTable.Sort();
+                    }
+                }
             }
         }
 
         private void addToDictionary(Table table)
         {
-            if (table != null)
+            if(table != null)
             {
-                if (!_referenceDictionary.ContainsKey(table.Name))
+                if(!_referenceDictionary.ContainsKey(table.Name))
                 {
                     _referenceDictionary.Add(table.Name, table);
                 }

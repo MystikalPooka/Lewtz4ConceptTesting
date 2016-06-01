@@ -32,6 +32,6 @@ namespace LewtzTesting.Data_Structure
         Medium_Magic = 1 << 20 | Magic,
         Major_Magic = 1 << 21 | Magic,
         Weapon = Melee_Weapon | Ranged_Weapon,
-        Table = 1 << 22
+        Ammunition = 1 << 22
     }
 }

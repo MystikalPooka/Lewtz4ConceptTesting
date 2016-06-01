@@ -1,4 +1,5 @@
-﻿using LewtzTesting.Visitors;
+﻿using LewtzTesting.Loaders;
+using LewtzTesting.Visitors;
 using System.Collections.Generic;
 
 namespace LewtzTesting.Data_Structure
@@ -6,7 +7,8 @@ namespace LewtzTesting.Data_Structure
     public class Table : Component
     {
         private List<Component> _children;
-        public int RollCount {get; set; }
+
+        public int RollCount { get; set; }
 
         public Table()
         {
@@ -24,6 +26,11 @@ namespace LewtzTesting.Data_Structure
             Book = book;
             _children = new List<Component>();
             RollCount = rollCount;
+        }
+
+        public void LoadFromFile(string filename, ILoader loader)
+        {
+            loader.LoadTableFromFile(filename, this);
         }
 
         public void Add(Component comp)

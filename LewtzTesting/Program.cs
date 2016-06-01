@@ -9,11 +9,10 @@ namespace LewtzTesting
     {
         static void Main(string[] args)
         {
-            var j = new JSONLoader();
             var baseTable = new Table("Treasure Table");
-            j.LoadTableFromFile(@"..\..\Tables\treasure table.json", baseTable);
+            baseTable.LoadFromFile(@"..\..\Tables\treasure table.json", new JSONLoader());
             var baseMagicTable = new Table("Magic Base");
-            j.LoadTableFromFile(@"..\..\Tables\magic base.json", baseMagicTable);
+            baseMagicTable.LoadFromFile(@"..\..\Tables\magic base.json", new JSONLoader());
 
             var printTree = new PrintEntireTreeVisitor();
 
@@ -21,7 +20,6 @@ namespace LewtzTesting
             baseMagicTable.Accept(printTree);
 
             baseTable.RollCount = 12;
-            baseMagicTable.RollCount = 2;
 
             Console.WriteLine("\r\n===================\r\n");
             var lootBag = new GetLootVisitor();
