@@ -54,7 +54,6 @@ namespace LewtzTesting.Visitors
             var itemToBuild = new MagicItem(item.ReferenceDictionary);
             itemToBuild.Build();
             lootBag.Add(itemToBuild);
-            //copies the same exact thing
         }
 
         public void Visit(MundaneItem item)

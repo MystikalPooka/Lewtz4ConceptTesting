@@ -5,7 +5,7 @@
 	  "probability":4,
 	  "probability_medium":10,
 	  "probability_major":10,
-	  "type":"item"
+	  "type":"table"
 	},
 	{
 	  "name":"weapons",

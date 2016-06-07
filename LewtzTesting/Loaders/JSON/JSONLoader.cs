@@ -27,7 +27,7 @@ namespace LewtzTesting.Loaders.JSON
 
                 if (token != null)
                 {
-                    loadAllItemstoTable(tableToAddTo, token);
+                    loadAllItemsAndAbilities(tableToAddTo, token);
                     loadAllTablesFromTokenAndFile(tableToAddTo, token, filename);
                 }
                 tableToAddTo.Sort();
@@ -38,6 +38,43 @@ namespace LewtzTesting.Loaders.JSON
             }
         }
 
+        private static void loadAllItemsAndAbilities(Table tableToAddTo, JToken token)
+        {
+            var itemsToAdd =
+                from item in token.Children<JObject>()
+                where item.Value<string>("type").ToLower().Contains("item")
+                select item;
+
+            foreach (var item in itemsToAdd)
+            {
+                var type = item.Value<string>("type");
+                Item newItem;
+
+                if (type.ToLower().Contains("magic"))
+                {
+                    newItem = item.ToObject<MagicItem>();
+                    ((MagicItem)newItem).ReferenceDictionary = _referenceDictionary;
+                }
+                else
+                {
+                    newItem = item.ToObject<MundaneItem>();
+                }
+                tableToAddTo.Add(newItem);
+            }
+
+            var abilitiesToAdd =
+                from item in token.Children<JObject>()
+                where item.Value<string>("type").ToLower().Contains("ability")
+                select item;
+
+            foreach (var ability in abilitiesToAdd)
+            {
+                var itemType = ability.Value<string>("type");
+                Ability newAbility = ability.ToObject<Ability>();
+                newAbility.Types |= ItemTypes.Ability;
+                tableToAddTo.Add(newAbility);
+            }
+        }
         private void loadAllTablesFromTokenAndFile(Table tableToAddTo, JToken token, string filename)
         {
             var tablesToLoad =
@@ -64,31 +101,6 @@ namespace LewtzTesting.Loaders.JSON
                         newTable.Sort();
                     }
                 }
-            }
-        }
-
-        private static void loadAllItemstoTable(Table tableToAddTo, JToken token)
-        {
-            var itemsToAdd =
-                from item in token.Children<JObject>()
-                where item.Value<string>("type").ToLower().Contains("item")
-                select item;
-
-            foreach (var item in itemsToAdd)
-            {
-                var itemType = item.Value<string>("type");
-                Item newItem;
-
-                if (itemType.ToLower().Contains("magic"))
-                {
-                    newItem = item.ToObject<MagicItem>();
-                    ((MagicItem)newItem).ReferenceDictionary = _referenceDictionary;
-                }
-                else
-                {
-                    newItem = item.ToObject<MundaneItem>();
-                }
-                tableToAddTo.Add(newItem);
             }
         }
 

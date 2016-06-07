@@ -4,68 +4,78 @@
 	  "book":"DMG216",
 	  "probability_minor":60,
 	  "probability_medium":5,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Shield, Ability"
 	},
 	{
 	  "name":"+1 armor",
 	  "book":"DMG216",
 	  "probability_minor":80,
 	  "probability_medium":10,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Armor, Ability"
 	},
 	{
 	  "name":"+2 shield",
 	  "book":"DMG216",
 	  "probability_minor":85,
 	  "probability_medium":20,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Shield, Ability"
 	},
 	{
 	  "name":"+2 armor",
 	  "book":"DMG216",
 	  "probability_minor":87,
 	  "probability_medium":30,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Armor, Ability"
 	},
 	{
 	  "name":"+3 shield",
 	  "book":"DMG216",
 	  "probability_medium":40,
 	  "probability_major":8,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Shield, Ability"
 	},
 	{
 	  "name":"+3 armor",
 	  "book":"DMG216",
 	  "probability_medium":50,
 	  "probability_major":16,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Armor, Ability"
 	},
 	{
 	  "name":"+4 shield",
 	  "book":"DMG216",
 	  "probability_medium":55,
 	  "probability_major":27,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Shield, Ability"
 	},
 	{
 	  "name":"+4 armor",
 	  "book":"DMG216",
 	  "probability_medium":57,
 	  "probability_major":38,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Armor, Ability"
 	},
 	{
 	  "name":"+5 shield",
 	  "book":"DMG216",
 	  "probability_major":49,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Shield, Ability"
 	},
 	{
 	  "name":"+5 armor",
 	  "book":"DMG216",
 	  "probability_major":57,
-	  "type":"ability"
+	  "type":"ability",
+	  item_types: "Armor, Ability"
 	},
 	{
 	  "name":"specific armor",
@@ -73,7 +83,8 @@
 	  "probability_minor":89,
 	  "probability_medium":60,
 	  "probability_major":60,
-	  "type":"table"
+	  "type":"table",
+	  item_types: "Armor, Ability"
 	},
 	{
 	  "name":"specific shield",
@@ -81,7 +92,8 @@
 	  "probability_minor":91,
 	  "probability_medium":63,
 	  "probability_major":63,
-	  "type":"table"
+	  "type":"table",
+	  item_types: "Shield, Ability"
 	},
 	{
 	  "name":"armor special abilities, roll again",
@@ -89,6 +101,6 @@
 	  "probability_minor":100,
 	  "probability_medium":100,
 	  "probability_major":100,
-	  "type":"table"
+	  "type":"item"
 	}
 ]

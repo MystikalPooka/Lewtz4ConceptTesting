@@ -23,20 +23,29 @@ namespace LewtzTesting.Data_Structure
 
         public void Build()
         {
-            Table magicTable = new Table();
-            var abilitiesVisitor = new GetLootVisitor();
-            if (ReferenceDictionary.TryGetValue("Magic Base", out magicTable))
+            Table magicTable = getTableFromDictionaryString("magic base");
+            
+            if (magicTable.Name != "Table Not Found")
             {
+                var abilitiesVisitor = new GetLootVisitor();
                 magicTable.Accept(abilitiesVisitor);
                 var abilityBag = abilitiesVisitor.GetLootBag();
                 if(abilityBag.Count > 0)
                 {
-                    Types |= abilityBag[0].Types;
+                    ItemTypes types = abilityBag[0].Types;
+                     if(types != ItemTypes.Ability && types != ItemTypes.None)
+                    {
+                        //System.Console.WriteLine("HOLY CHEESE, IT'S NOT JUST AN ABILITY " + types);
+                    }
                     //Name = ROLL ON TABLE TO DETERMINE ITEM (based on originally rolled item type)
                     _appliedAbilities.AddRange(abilityBag);
                 }
-                
             }
+        }
+
+        private Table getTableFromDictionaryString(string tableName)
+        {
+            return ReferenceDictionary.ContainsKey(tableName) ? ReferenceDictionary[tableName] : new Table("Table Not Found");
         }
 
         public override void Accept(IVisitor visitor)
