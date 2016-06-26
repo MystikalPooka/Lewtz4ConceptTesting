@@ -8,16 +8,24 @@
 	{
 	  "name":"mundane items",
 	  "book":"DMG216",
-	  "probability":80,
+	  "probability":50,
 	  "type":"table",
+	  "rollcount":1
+	},
+	{
+	  "name":"medium magic item",
+	  "book":"DMG216",
+	  "probability":70,
+	  "type":"magic item",
+	  "item types":"Magic_Medium",
 	  "count":1
 	},
 	{
-	  "name":"minor magic item",
+	  "name":"major magic item",
 	  "book":"DMG216",
 	  "probability":100,
 	  "type":"magic item",
-	  "item types":"Minor_Magic",
+	  "item types":"Magic_Major",
 	  "count":1
 	}
 ]

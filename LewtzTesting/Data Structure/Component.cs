@@ -9,19 +9,23 @@ namespace LewtzTesting.Data_Structure
         public string Name { get; set; }
 
         [JsonProperty("probability")]
-        public int Probability { get; protected set; }
+        public int Probability { get; set; }
 
         [JsonProperty("book")]
-        public string Book { get; protected set; }
+        public string Book { get; set; }
 
         [JsonProperty("item types")]
         public ItemTypes Types { get; set; }
 
+        public Table ParentTable { get; set; }
+
         public abstract void Accept(IVisitor visitor);
+
+        public abstract object Clone();
 
         public override string ToString()
         {
-            return this.GetType().Name +": " + Name + " | Prob: " + Probability + " | Book: " + Book;
+            return GetType().Name +": " + Name + " | Prob: " + Probability + " | Book: " + Book;
         }
     }
 }

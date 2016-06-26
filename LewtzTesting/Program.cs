@@ -11,6 +11,7 @@ namespace LewtzTesting
         {
             var baseTable = new Table("Treasure Table");
             baseTable.LoadFromFile(@"..\..\Tables\treasure table.json", new JSONLoader());
+
             var baseMagicTable = new Table("magic base");
             baseMagicTable.LoadFromFile(@"..\..\Tables\magic base.json", new JSONLoader());
 
@@ -25,13 +26,12 @@ namespace LewtzTesting
             var lootBag = new GetLootVisitor();
             var lootBag2 = new GetLootVisitor();
             baseTable.Accept(lootBag);
-            //baseTable.Accept(lootBag2);
 
             foreach (Component comp in lootBag.GetLootBag())
             {
                 Console.WriteLine(comp);
             }
-
+        
             Console.ReadLine();
         }
     }

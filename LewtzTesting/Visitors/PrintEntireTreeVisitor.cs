@@ -23,7 +23,7 @@ namespace LewtzTesting.Visitors
                 Console.Write("|-");
                 indent += "|  ";
             }
-            Console.WriteLine(comp.GetType().Name + " - " + comp.Name + " Prob: " + comp.Probability + " Types: " + comp.Types);
+            Console.WriteLine(comp + "\n\t--- Types: " + comp.Types + " ---");
 
             if(comp is Table)
             {

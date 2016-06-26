@@ -1,51 +1,79 @@
 ﻿using System.Collections.Generic;
 using LewtzTesting.Visitors;
+using System.Linq;
+using System;
 
 namespace LewtzTesting.Data_Structure
 {
     public class MagicItem : Item
     {
-        private List<Component> _appliedAbilities;
-        public Dictionary<string, Table> ReferenceDictionary { get; set; }
+        private List<Component> appliedAbilities;
+        public TableDictionary ReferenceDictionary { protected get; set; }
 
-       public MagicItem(Dictionary<string, Table> referenceDict)
+        private Table buildTable;
+
+        public MagicItem(TableDictionary referenceDict)
         {
-            _appliedAbilities = new List<Component>();
+            appliedAbilities = new List<Component>();
             ReferenceDictionary = referenceDict;
-            Types |= ItemTypes.Magic;
+
+            buildTable = getSortedTableFromDictionaryString("magic base");
+        }
+
+        public MagicItem(MagicItem item)
+        {
+            appliedAbilities = new List<Component>();
+            ReferenceDictionary = item.ReferenceDictionary;
+
+            Types |= item.Types;
+            Cost = item.Cost;
+            Probability = item.Probability;
+
+            buildTable = getSortedTableFromDictionaryString("magic base");
         }
 
         public MagicItem()
         {
-            _appliedAbilities = new List<Component>();
+            appliedAbilities = new List<Component>();
             Types |= ItemTypes.Magic;
+
+            buildTable = new Table("Table Not Found");
+        }
+
+        private Table getSortedTableFromDictionaryString(string tableName)
+        {
+            var table = ReferenceDictionary.GetTableFromString(tableName);
+            table.RemoveChildrenNotMatchingTypes(Types);
+            return table;
         }
 
         public void Build()
         {
-            Table magicTable = getTableFromDictionaryString("magic base");
-            
-            if (magicTable.Name != "Table Not Found")
-            {
-                var abilitiesVisitor = new GetLootVisitor();
-                magicTable.Accept(abilitiesVisitor);
-                var abilityBag = abilitiesVisitor.GetLootBag();
-                if(abilityBag.Count > 0)
-                {
-                    ItemTypes types = abilityBag[0].Types;
-                     if(types != ItemTypes.Ability && types != ItemTypes.None)
-                    {
-                        //System.Console.WriteLine("HOLY CHEESE, IT'S NOT JUST AN ABILITY " + types);
-                    }
-                    //Name = ROLL ON TABLE TO DETERMINE ITEM (based on originally rolled item type)
-                    _appliedAbilities.AddRange(abilityBag);
-                }
-            }
+            buildTable = getSortedTableFromDictionaryString("magic base");
+            buildTable = GetBaseItemTable();
         }
 
-        private Table getTableFromDictionaryString(string tableName)
+        private Table GetBaseItemTable()
         {
-            return ReferenceDictionary.ContainsKey(tableName) ? ReferenceDictionary[tableName] : new Table("Table Not Found");
+            if (buildTable.Name != "Table Not Found" && buildTable != null)
+            {
+                var abilitiesVisitor = new GetLootVisitor();
+                buildTable.Accept(abilitiesVisitor);
+
+                buildTable.RollCount = 1;
+
+                var abilityBag = abilitiesVisitor.GetLootBag();
+                ItemTypes typesOfItemAbility = ItemTypes.None;
+                if (abilityBag != null)
+                {
+                    typesOfItemAbility = abilityBag.FirstOrDefault().Types;
+                }
+                
+                appliedAbilities.AddRange(abilityBag);
+                ReferenceDictionary.GetMagicTableFromItemTypes(typesOfItemAbility);
+                //find type, then return the correct table from the dictionary to roll on
+            }
+            return null;
         }
 
         public override void Accept(IVisitor visitor)
@@ -53,15 +81,20 @@ namespace LewtzTesting.Data_Structure
             visitor.Visit(this);
         }
 
+        public override object Clone()
+        {
+            return new MagicItem(this);
+        }
+
         public override string ToString()
         {
-            return base.ToString() + Types.ToString() + " Abilities: \r\n \t"+ GetAbilityNames();
+            return base.ToString() + " " + Types.ToString() + " Abilities: \r\n \t" + GetAbilityNames();
         }
 
         private string GetAbilityNames()
         {
             string abilities = "";
-            foreach(Component comp in _appliedAbilities)
+            foreach(Component comp in appliedAbilities)
             {
                 abilities += comp.Name + "\r\n";
             }

@@ -14,6 +14,7 @@ namespace LewtzTesting.Data_Structure
         Shield = 1 << 2 | Armor,
         Melee_Weapon = 1 << 3,
         Ranged_Weapon = 1 << 4,
+        Weapon = Melee_Weapon | Ranged_Weapon,
         Potion = 1 << 5,
         Ring = 1 << 6,
         Rod = 1 << 7,
@@ -27,11 +28,11 @@ namespace LewtzTesting.Data_Structure
         Tool = 1 << 15,
         Gem = 1 << 16,
         Art = 1 << 17,
-        Ability = 1 << 18,
-        Minor_Magic = 1 << 19 | Magic,
-        Medium_Magic = 1 << 20 | Magic,
-        Major_Magic = 1 << 21 | Magic,
-        Weapon = Melee_Weapon | Ranged_Weapon,
-        Ammunition = 1 << 22
+        Ammunition = 1 << 18,
+        Ability = 1 << 19,
+        Magic_Minor = 1 << 20,
+        Magic_Medium = 1 << 21,
+        Magic_Major = 1 << 22,
+        Table = 1 << 23 //24 bits
     }
 }

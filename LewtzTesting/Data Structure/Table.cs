@@ -1,12 +1,14 @@
 ﻿using LewtzTesting.Loaders;
 using LewtzTesting.Visitors;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LewtzTesting.Data_Structure
 {
     public class Table : Component
     {
-        private List<Component> _children;
+        private List<Component> children;
 
         public int RollCount { get; set; }
 
@@ -16,7 +18,7 @@ namespace LewtzTesting.Data_Structure
             Probability = 0;
             Book = "";
             RollCount = 1;
-            _children = new List<Component>();
+            children = new List<Component>();
         }
 
         public Table(string name, int prob = 0, string book = "", int rollCount = 1)
@@ -24,8 +26,18 @@ namespace LewtzTesting.Data_Structure
             Name = name;
             Probability = prob;
             Book = book;
-            _children = new List<Component>();
+            children = new List<Component>();
             RollCount = rollCount;
+        }
+
+        protected Table(Table copyTable)
+        {
+            Name = copyTable.Name;
+            Probability = copyTable.Probability;
+            Book = copyTable.Book;
+            RollCount = copyTable.RollCount;
+            ParentTable = copyTable.ParentTable;
+            children = copyTable.children;
         }
 
         public void LoadFromFile(string filename, ILoader loader)
@@ -35,22 +47,32 @@ namespace LewtzTesting.Data_Structure
 
         public void Add(Component comp)
         {
-            _children.Add(comp);
+            children.Add(comp);
         }
 
         public void Remove(Component comp)
         {
-            _children.Remove(comp);
+            children.Remove(comp);
         }
 
         public IList<Component> GetChildren()
         {
-            return _children.AsReadOnly();
+            return children.AsReadOnly();
         }
 
-        public void Sort()
+        public void SetChildren(List<Component> children)
         {
-            _children.Sort((x, y) => x.Probability.CompareTo(y.Probability));
+            this.children = children;
+        }
+
+        public void SortTable()
+        {
+            children.Sort((x, y) => x.Probability.CompareTo(y.Probability));
+        }
+
+        public void RemoveChildrenNotMatchingTypes(ItemTypes type)
+        {
+            children = children.Where(comp => (comp.Types & type) > 0).ToList();
         }
 
         public override void Accept(IVisitor visitor)
@@ -60,7 +82,12 @@ namespace LewtzTesting.Data_Structure
 
         public override string ToString()
         {
-            return base.ToString() + " | # Entries: " + _children.Count;
+            return base.ToString() + " | # Entries: " + children.Count;
+        }
+
+        public override object Clone()
+        {
+            return new Table(this);
         }
     }
 }

@@ -19,7 +19,6 @@ namespace LewtzTesting.Visitors
             lootBag = new List<Component>();
         }
 
-        
         public void Visit(Table table)
         {
             var children = table.GetChildren();
@@ -33,14 +32,17 @@ namespace LewtzTesting.Visitors
                     int roll = rand.Next(0, maxProb);
                     foreach (Component comp in children)
                     {
-                        if (comp.Probability > roll)
+                        if (comp.Probability >= roll)
                         {
-                            if (comp.Name.Contains("roll again")) table.RollCount++;
                             comp.Accept(this);
                             break;
                         }
                     }
                 }
+            }
+            else
+            {
+                lootBag.Add(new MundaneItem(table.Name));
             }
         }
 
@@ -51,7 +53,7 @@ namespace LewtzTesting.Visitors
 
         public void Visit(MagicItem item)
         {
-            var itemToBuild = new MagicItem(item.ReferenceDictionary);
+            var itemToBuild = item.Clone() as MagicItem;
             itemToBuild.Build();
             lootBag.Add(itemToBuild);
         }

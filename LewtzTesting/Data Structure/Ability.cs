@@ -16,5 +16,10 @@ namespace LewtzTesting.Data_Structure
         {
             visitor.Visit(this);
         }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

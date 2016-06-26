@@ -1,107 +1,102 @@
-﻿
-using LewtzTesting.Data_Structure;
-using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using LewtzTesting.Data_Structure;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace LewtzTesting.Loaders.JSON
 {
-    public class JSONLoader : ILoader
+    class JSONLoader : ILoader
     {
-        private static Dictionary<string, Table> _referenceDictionary = new Dictionary<string, Table>();
+        private static TableDictionary _referenceDictionary = new TableDictionary();
+        private string _filename;
+        private Table tableToLoad;
 
-        public void LoadTableFromFile(string filename, Table tableToAddTo = null)
+        public void LoadTableFromFile(string filename, Table loadTable)
         {
+
             try
             {
                 var json = File.ReadAllText(filename);
                 JToken token = JToken.Parse(json);
 
-                var currentTableName = getNameFromFilename(filename);
-                if (tableToAddTo == null)
+                if (loadTable == null)
                 {
-                    tableToAddTo = new Table(currentTableName);
+                    loadTable = new Table(getNameFromFilename(filename));
                 }
-                addToDictionary(tableToAddTo);
-
-                if (token != null)
+                //loadTable.Types |= ItemTypes.Table;
+                if (tableToLoad == null)
                 {
-                    loadAllItemsAndAbilities(tableToAddTo, token);
-                    loadAllTablesFromTokenAndFile(tableToAddTo, token, filename);
+                    tableToLoad = loadTable;
                 }
-                tableToAddTo.Sort();
-            }
-            catch(FileNotFoundException e)
-            {
-                
-            }
-        }
 
-        private static void loadAllItemsAndAbilities(Table tableToAddTo, JToken token)
-        {
-            var itemsToAdd =
-                from item in token.Children<JObject>()
-                where item.Value<string>("type").ToLower().Contains("item")
-                select item;
-
-            foreach (var item in itemsToAdd)
-            {
-                var type = item.Value<string>("type");
-                Item newItem;
-
-                if (type.ToLower().Contains("magic"))
+                if (_filename == null)
                 {
-                    newItem = item.ToObject<MagicItem>();
-                    ((MagicItem)newItem).ReferenceDictionary = _referenceDictionary;
+                    _filename = filename;
                 }
-                else
+
+                foreach (JObject obj in token)
                 {
-                    newItem = item.ToObject<MundaneItem>();
-                }
-                tableToAddTo.Add(newItem);
-            }
-
-            var abilitiesToAdd =
-                from item in token.Children<JObject>()
-                where item.Value<string>("type").ToLower().Contains("ability")
-                select item;
-
-            foreach (var ability in abilitiesToAdd)
-            {
-                var itemType = ability.Value<string>("type");
-                Ability newAbility = ability.ToObject<Ability>();
-                newAbility.Types |= ItemTypes.Ability;
-                tableToAddTo.Add(newAbility);
-            }
-        }
-        private void loadAllTablesFromTokenAndFile(Table tableToAddTo, JToken token, string filename)
-        {
-            var tablesToLoad =
-                    from table in token.Children<JObject>()
-                    where table.Value<string>("type") == "table"
-                    select table;
-
-            foreach (var table in tablesToLoad)
-            {
-                var probabilityList = getProbabilityListFromNode(table);
-                //make a new table for each probability
-                for (int i = 0; i < probabilityList.Count; ++i)
-                {
-                    var newTable = table.ToObject<Table>(); //includes base case "probability"
-                    string newFilename = filename.Replace(tableToAddTo.Name.ToLower(), newTable.Name.Replace(", roll again", ""));
-
-                    var p = probabilityList[i];
-
-                    var diffProbability = (int)p;
-                    if (diffProbability > 0)
+                    var probabilityList = getProbabilityListFromNode(obj);
+                    foreach (JProperty prob in probabilityList)
                     {
-                        tableToAddTo.Add(newTable);
-                        LoadTableFromFile(newFilename, newTable);
-                        newTable.Sort();
+                        Component loadedComponent = loadComponent(obj, prob); ;
+                        if (loadedComponent == null) break;
+
+                        var types = getProbabilityTypesFromJProperty(prob);
+                        if ((types & tableToLoad.Types) != 0 || tableToLoad.Types == ItemTypes.None)
+                        {
+                            tableToLoad.Add(loadedComponent);
+                            tableToLoad.SortTable();
+                            addToDictionary(tableToLoad);
+                        }
                     }
                 }
             }
+            catch(FileNotFoundException e)
+            {
+                Console.WriteLine("File Not Found: " + filename);
+            }  
+            loadTable.SortTable();
+        }
+
+        private Component loadComponent(JObject obj, JProperty probability)
+        {
+            Component compToAdd = null;
+
+            var type = obj.GetValue("type").ToString().ToLower();
+            switch (type)
+            {
+                case "item":
+                    compToAdd = obj.ToObject<MundaneItem>();
+                    break;
+                case "magic item":
+                    compToAdd = obj.ToObject<MagicItem>();
+                    compToAdd.Types |= getProbabilityTypesFromJProperty(probability);
+                    ((MagicItem)compToAdd).ReferenceDictionary = _referenceDictionary;
+                    break;
+                case "table":
+                    compToAdd = obj.ToObject<Table>();
+                    compToAdd.Types |= getProbabilityTypesFromJProperty(probability);
+
+                    compToAdd.Name = compToAdd.Name.Replace(", roll again", "");
+                    
+                    string newFilename = _filename.Replace(tableToLoad.Name.ToLower(), compToAdd.Name);
+                    ((Table)compToAdd).LoadFromFile(newFilename, new JSONLoader());
+                    break;
+                case "ability":
+                    compToAdd = obj.ToObject<Ability>();
+                    break;
+                default:
+                    Console.WriteLine("INCORRECT TYPE: " + obj.Value<string>("type"));
+                    compToAdd = obj.ToObject<MundaneItem>();
+                    break;
+            }
+            compToAdd.Name += probability.Name.Replace("probability", "");
+            compToAdd.Probability = (int)probability.Value;
+            compToAdd.ParentTable = tableToLoad;
+            return compToAdd;
         }
 
         private void addToDictionary(Table table)
@@ -115,6 +110,16 @@ namespace LewtzTesting.Loaders.JSON
             }
         }
 
+        private ItemTypes getProbabilityTypesFromJProperty(JProperty prop)
+        {
+            var probabilityName = prop.Name.Replace("probability", "");
+            var probabilityType = "";
+
+            probabilityType = "magic" + probabilityName;
+            ItemTypes types = (ItemTypes)Enum.Parse(typeof(ItemTypes), probabilityType, true);
+
+            return types;
+        }
         private string getNameFromFilename(string filename)
         {
             int indexOfLastSlash = filename.LastIndexOf(@"\");

@@ -69,11 +69,12 @@
     <Compile Include="Data Structure\ItemTypes.cs" />
     <Compile Include="Data Structure\Table.cs" />
     <Compile Include="Data Structure\MagicItem.cs" />
+    <Compile Include="Data Structure\TableDictionary.cs" />
     <Compile Include="Loaders\ILoader.cs" />
-    <Compile Include="Loaders\JSON\JSONLoader - Copy.cs" />
+    <Compile Include="Loaders\JSON\JSONLoader.cs" />
     <Compile Include="Visitors\IVisitable.cs" />
     <Compile Include="Visitors\IVisitor.cs" />
-    <Compile Include="Loaders\JSON\JSONLoader.cs" />
+    <Compile Include="Loaders\JSON\JSONLoaderOld.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Visitors\GetLootVisitor.cs" />

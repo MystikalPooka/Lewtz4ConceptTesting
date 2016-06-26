@@ -15,7 +15,7 @@ namespace LewtzTesting.Data_Structure
             Book = "";
         }
 
-        public MundaneItem(string name, int prob, int cost = 0, string book = "")
+        public MundaneItem(string name, int prob = 0, int cost = 0, string book = "")
         {
             Name = name;
             Probability = prob;
@@ -26,6 +26,11 @@ namespace LewtzTesting.Data_Structure
         public override void Accept(IVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public override object Clone()
+        {
+            throw new NotImplementedException();
         }
     }
 }
