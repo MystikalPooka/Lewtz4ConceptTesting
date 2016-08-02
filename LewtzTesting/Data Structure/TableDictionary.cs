@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LewtzTesting.Data_Structure
 {
-    public class TableDictionary : Dictionary<string,Table>
+    public class TableDatabase : Dictionary<string,Table>
     {
         public Table GetTableFromString(string tableName)
         {
@@ -16,6 +16,14 @@ namespace LewtzTesting.Data_Structure
         public Table GetMagicTableFromItemTypes(ItemTypes types)
         {
             return new Table();
+        }
+
+        public void AddTable(Table table)
+        {
+            if (!ContainsKey(table.Name))
+            {
+                Add(table.Name, table);
+            }
         }
     }
 }

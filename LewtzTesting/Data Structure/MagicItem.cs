@@ -1,26 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LewtzTesting.Visitors;
 using System.Linq;
-using System;
 
 namespace LewtzTesting.Data_Structure
 {
     public class MagicItem : Item
     {
         private List<Component> appliedAbilities;
-        public TableDictionary ReferenceDictionary { protected get; set; }
+        public TableDatabase ReferenceDictionary { private get; set; }
 
-        private Table buildTable;
-
-        public MagicItem(TableDictionary referenceDict)
+        public MagicItem(TableDatabase referenceDict)
         {
             appliedAbilities = new List<Component>();
             ReferenceDictionary = referenceDict;
-
-            buildTable = getSortedTableFromDictionaryString("magic base");
         }
 
-        public MagicItem(MagicItem item)
+        protected MagicItem(MagicItem item)
         {
             appliedAbilities = new List<Component>();
             ReferenceDictionary = item.ReferenceDictionary;
@@ -28,16 +24,12 @@ namespace LewtzTesting.Data_Structure
             Types |= item.Types;
             Cost = item.Cost;
             Probability = item.Probability;
-
-            buildTable = getSortedTableFromDictionaryString("magic base");
         }
 
         public MagicItem()
         {
             appliedAbilities = new List<Component>();
             Types |= ItemTypes.Magic;
-
-            buildTable = new Table("Table Not Found");
         }
 
         private Table getSortedTableFromDictionaryString(string tableName)
@@ -49,31 +41,46 @@ namespace LewtzTesting.Data_Structure
 
         public void Build()
         {
-            buildTable = getSortedTableFromDictionaryString("magic base");
-            buildTable = GetBaseItemTable();
+            RollAllAbilities();
+            SetItemTypesFromAppliedAbilities();
+            RollSpecialAbilities();
         }
 
-        private Table GetBaseItemTable()
+        private void RollAllAbilities()
         {
+            var buildTable = getSortedTableFromDictionaryString("magic base");
             if (buildTable.Name != "Table Not Found" && buildTable != null)
             {
                 var abilitiesVisitor = new GetLootVisitor();
                 buildTable.Accept(abilitiesVisitor);
 
                 buildTable.RollCount = 1;
-
-                var abilityBag = abilitiesVisitor.GetLootBag();
-                ItemTypes typesOfItemAbility = ItemTypes.None;
-                if (abilityBag != null)
-                {
-                    typesOfItemAbility = abilityBag.FirstOrDefault().Types;
-                }
-                
-                appliedAbilities.AddRange(abilityBag);
-                ReferenceDictionary.GetMagicTableFromItemTypes(typesOfItemAbility);
-                //find type, then return the correct table from the dictionary to roll on
+                appliedAbilities.AddRange(abilitiesVisitor.GetLootBag());
             }
-            return null;
+        }
+
+        private void SetItemTypesFromAppliedAbilities()
+        {
+            var baseItemTypes = appliedAbilities.Last().Types;
+            Types |= (baseItemTypes & ~ItemTypes.Ability);
+        }
+
+        private void RollSpecialAbilities()
+        {
+            var abilitiesToRoll =
+                                from ability in appliedAbilities
+                                where ability.Name.ToLower().Contains("special abilities")
+                                select ability;
+
+            foreach(Component ability in abilitiesToRoll)
+            {
+                var typeToRoll = Types & ~(ItemTypes.Magic | ItemTypes.Magic_Major | ItemTypes.Magic_Medium | ItemTypes.Magic_Minor);
+                var rollTable = getSortedTableFromDictionaryString(typeToRoll.ToString().ToLower() + " special abilities");
+                Console.WriteLine(typeToRoll.ToString().ToLower() + " special abilities ...: " + rollTable);
+
+                //Special abilities are NOT loaded on startup because I have to do edge cases: armor and shield special abilitie are 
+                //in ONE roll, not 2.
+            }
         }
 
         public override void Accept(IVisitor visitor)

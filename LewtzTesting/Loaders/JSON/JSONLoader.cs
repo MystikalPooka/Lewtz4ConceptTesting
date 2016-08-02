@@ -9,7 +9,7 @@ namespace LewtzTesting.Loaders.JSON
 {
     class JSONLoader : ILoader
     {
-        private static TableDictionary _referenceDictionary = new TableDictionary();
+        private static TableDatabase _referenceDictionary = new TableDatabase();
         private string _filename;
         private Table tableToLoad;
 
@@ -18,14 +18,13 @@ namespace LewtzTesting.Loaders.JSON
 
             try
             {
-                var json = File.ReadAllText(filename);
                 JToken token = JToken.Parse(json);
 
                 if (loadTable == null)
                 {
                     loadTable = new Table(getNameFromFilename(filename));
                 }
-                //loadTable.Types |= ItemTypes.Table;
+
                 if (tableToLoad == null)
                 {
                     tableToLoad = loadTable;
@@ -49,7 +48,7 @@ namespace LewtzTesting.Loaders.JSON
                         {
                             tableToLoad.Add(loadedComponent);
                             tableToLoad.SortTable();
-                            addToDictionary(tableToLoad);
+                            _referenceDictionary.AddTable(tableToLoad);
                         }
                     }
                 }
@@ -79,7 +78,6 @@ namespace LewtzTesting.Loaders.JSON
                 case "table":
                     compToAdd = obj.ToObject<Table>();
                     compToAdd.Types |= getProbabilityTypesFromJProperty(probability);
-
                     compToAdd.Name = compToAdd.Name.Replace(", roll again", "");
                     
                     string newFilename = _filename.Replace(tableToLoad.Name.ToLower(), compToAdd.Name);
@@ -99,26 +97,13 @@ namespace LewtzTesting.Loaders.JSON
             return compToAdd;
         }
 
-        private void addToDictionary(Table table)
-        {
-            if (table != null)
-            {
-                if (!_referenceDictionary.ContainsKey(table.Name))
-                {
-                    _referenceDictionary.Add(table.Name, table);
-                }
-            }
-        }
-
         private ItemTypes getProbabilityTypesFromJProperty(JProperty prop)
         {
             var probabilityName = prop.Name.Replace("probability", "");
             var probabilityType = "";
 
             probabilityType = "magic" + probabilityName;
-            ItemTypes types = (ItemTypes)Enum.Parse(typeof(ItemTypes), probabilityType, true);
-
-            return types;
+            return (ItemTypes)Enum.Parse(typeof(ItemTypes), probabilityType, true);
         }
         private string getNameFromFilename(string filename)
         {

@@ -12,15 +12,20 @@ namespace LewtzTesting
             var baseTable = new Table("Treasure Table");
             baseTable.LoadFromFile(@"..\..\Tables\treasure table.json", new JSONLoader());
 
+            var baseTable2 = new Table("Treasure Table");
+            baseTable.LoadFromFile(@"..\..\Tables\treasure table 2.json", new JSONLoader());
+
             var baseMagicTable = new Table("magic base");
             baseMagicTable.LoadFromFile(@"..\..\Tables\magic base.json", new JSONLoader());
 
             var printTree = new PrintEntireTreeVisitor();
 
             baseTable.Accept(printTree);
-            baseMagicTable.Accept(printTree);
+            Console.WriteLine("\r\n===================\r\n");
+            baseTable2.Accept(printTree);
+            //baseMagicTable.Accept(printTree);
 
-            baseTable.RollCount = 12;
+            baseTable.RollCount = 100;
 
             Console.WriteLine("\r\n===================\r\n");
             var lootBag = new GetLootVisitor();

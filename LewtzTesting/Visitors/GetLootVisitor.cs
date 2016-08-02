@@ -26,16 +26,21 @@ namespace LewtzTesting.Visitors
             if(children.Count != 0)
             {
                 int maxProb = children.Max(x => x.Probability);
-
-                for (int i = 0; i < table.RollCount; ++i)
+                int rolls = table.RollCount;
+                for (int i = 0; i < rolls; ++i)
                 {
                     int roll = rand.Next(0, maxProb);
-                    foreach (Component comp in children)
+                    foreach(Component comp in children)
                     {
                         if (comp.Probability >= roll)
                         {
                             comp.Accept(this);
-                            break;
+                            if (comp.Name.ToLower().Contains("roll again"))
+                            {
+                                ++rolls;
+                                continue;
+                            }
+                            else break;
                         }
                     }
                 }
