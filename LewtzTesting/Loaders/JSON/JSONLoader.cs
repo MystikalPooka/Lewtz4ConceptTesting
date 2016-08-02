@@ -18,6 +18,7 @@ namespace LewtzTesting.Loaders.JSON
 
             try
             {
+                var json = File.ReadAllText(filename);
                 JToken token = JToken.Parse(json);
 
                 if (loadTable == null)
